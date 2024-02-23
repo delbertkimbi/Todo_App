@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -8,6 +11,8 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,16 +25,18 @@ class _AddPageState extends State<AddPage> {
         padding: const EdgeInsets.all(20),
         children: [
           /// FORM
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            controller: titleController,
+            decoration: const InputDecoration(
               hintText: "Title",
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            controller: descriptionController,
+            decoration: const InputDecoration(
               hintText: "Description",
             ),
             keyboardType: TextInputType.multiline,
@@ -46,5 +53,53 @@ class _AddPageState extends State<AddPage> {
         ],
       ),
     );
+  }
+
+  /// HANDLE FORM
+  Future<void> summitData() async {
+    //Get dat from form
+    final title = titleController;
+    final description = descriptionController;
+    //Post gotten info
+    final body = {
+      "title": title,
+      "description": description,
+      "is_completed": false,
+    };
+    //Submit dat to the server
+    //post api call
+    const url = "http://api.nstack.in/v1/todos";
+    final uri = Uri.parse(url);
+    final responds = await http.post(
+      uri,
+      body: jsonEncode(body),
+      headers: {'Content-Type': 'application/json'},
+    );
+    //Show success or failed message depending on the status
+    if (responds.statusCode == 201) {
+      showSuccessMessage("Added Succesfully");
+    } else {
+      showErrorMessage("Creation faild");
+    }
+  }
+
+  // API responds reaction
+  void showSuccessMessage(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  // API responds reaction
+  void showErrorMessage(String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: Colors.redAccent,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
