@@ -19,13 +19,14 @@ class _TodoListPageState extends State<TodoListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.deepPurple[200],
       appBar: AppBar(
         title: const Text("Todo App"),
         centerTitle: true,
         elevation: 0,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: navigateToAddPage,
         label: const Text("Add Todo"),
       ),
     );
@@ -43,6 +44,5 @@ class _TodoListPageState extends State<TodoListPage> {
     final uri = Uri.parse(url);
     final responds = await http.get(uri);
     //Display data
-    print(responds);
   }
 }
