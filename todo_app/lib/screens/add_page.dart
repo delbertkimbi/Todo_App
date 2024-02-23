@@ -58,8 +58,8 @@ class _AddPageState extends State<AddPage> {
   /// HANDLE FORM
   Future<void> summitData() async {
     //Get dat from form
-    final title = titleController;
-    final description = descriptionController;
+    final title = titleController.text;
+    final description = descriptionController.text;
     //Post gotten info
     final body = {
       "title": title,
@@ -77,6 +77,8 @@ class _AddPageState extends State<AddPage> {
     );
     //Show success or failed message depending on the status
     if (responds.statusCode == 201) {
+      titleController.text = '';
+      descriptionController.text = '';
       showSuccessMessage("Added Succesfully");
     } else {
       showErrorMessage("Creation faild");
@@ -89,7 +91,6 @@ class _AddPageState extends State<AddPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  // API responds reaction
   void showErrorMessage(String message) {
     final snackBar = SnackBar(
       content: Text(
