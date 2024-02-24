@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:todo_app/screens/add_page.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +21,7 @@ class _TodoListPageState extends State<TodoListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple[200],
+      backgroundColor: Colors.deepPurple[100],
       appBar: AppBar(
         title: const Text("Todo App"),
         centerTitle: true,
@@ -44,5 +46,7 @@ class _TodoListPageState extends State<TodoListPage> {
     final uri = Uri.parse(url);
     final responds = await http.get(uri);
     //Display data
+    final data = jsonDecode(responds.body);
+    debugPrint(data);
   }
 }
