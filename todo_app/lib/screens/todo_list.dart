@@ -42,12 +42,24 @@ class _TodoListPageState extends State<TodoListPage> {
               child: ListView.builder(
                 itemCount: items.length,
                 itemBuilder: (context, index) {
-                  final item = items as Map;
+                  final item = items[index] as Map;
                   final id = item['_id'] as String;
                   return ListTile(
-                    leading: CircleAvatar(child: Text('${index + 1}')),
-                    title: item['title'],
-                    subtitle: item['description'],
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.deepPurple,
+                      child: Text(
+                        '${index + 1}',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      item['title'],
+                    ),
+                    subtitle: Text(
+                      item['description'],
+                    ),
 
                     ///PopUp Menu
                     trailing: PopupMenuButton(
