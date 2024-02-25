@@ -48,10 +48,7 @@ class _AddPageState extends State<AddPage> {
             height: 20,
           ),
           ElevatedButton(
-            onPressed: () {
-              summitData();
-              return Navigator.pop();
-            },
+            onPressed: summitData,
             child: const Text("Submit"),
           ),
         ],
