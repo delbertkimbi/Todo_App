@@ -16,6 +16,7 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.deepPurple[100],
       appBar: AppBar(
         title: const Text("Add Todo"),
         centerTitle: true,
@@ -47,7 +48,10 @@ class _AddPageState extends State<AddPage> {
             height: 20,
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              summitData();
+              return Navigator.pop();
+            },
             child: const Text("Submit"),
           ),
         ],
@@ -66,7 +70,7 @@ class _AddPageState extends State<AddPage> {
       "description": description,
       "is_completed": false,
     };
-    //Submit dat to the server
+    //Submit data to the server
     //post api call
     const url = "http://api.nstack.in/v1/todos";
     final uri = Uri.parse(url);

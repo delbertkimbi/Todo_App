@@ -18,6 +18,8 @@ class _TodoListPageState extends State<TodoListPage> {
     fetchData();
   }
 
+  bool isLoading = false;
+  List items = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +33,47 @@ class _TodoListPageState extends State<TodoListPage> {
         onPressed: navigateToAddPage,
         label: const Text("Add Todo"),
       ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : RefreshIndicator(
+              onRefresh: fetchData,
+              child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items as Map;
+                  return ListTile(
+                    leading: CircleAvatar(child: Text('${index + 1}')),
+                    title: item['title'],
+                    subtitle: item['description'],
+
+                    ///PopUp Menu
+                    trailing: PopupMenuButton(
+                      onSelected: (value) {
+                        if (value == 'edit') {
+                          // Go to edit page
+                        } else if (value == 'delte') {
+                          //Go to delete page
+                        }
+                      },
+                      itemBuilder: (context) {
+                        return [
+                          const PopupMenuItem(
+                            value: 'edit',
+                            child: Text("Edit"),
+                          ),
+                          const PopupMenuItem(
+                            value: 'delete',
+                            child: Text("delete"),
+                          ),
+                        ];
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
 
@@ -45,8 +88,16 @@ class _TodoListPageState extends State<TodoListPage> {
     const url = "http://api.nstack.in/v1/todos?page=1&limit=10";
     final uri = Uri.parse(url);
     final responds = await http.get(uri);
+    if (responds.statusCode == 200) {
+      final json = jsonDecode(responds.body) as Map;
+      final result = json["items"] as List;
+      setState(() {
+        items = result;
+      });
+    }
+    setState(() {
+      isLoading = false;
+    });
     //Display data
-    final data = jsonDecode(responds.body);
-    debugPrint(data);
   }
 }
